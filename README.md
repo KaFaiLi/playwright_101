@@ -49,7 +49,9 @@ complete answer.
   The MAS publications page itself has no direct PDF links; the
   solution follows links to individual publication pages and downloads
   PDFs from there instead. If **both** the listing page *and* the
-  publication pages return 0 PDFs, the MAS site layout may have changed
+  publication pages return 0 PDFs, check that `headless=False` hasn't
+  been changed to `True` (MAS appears to serve a different page to
+  headless browsers) — otherwise the MAS site layout may have changed
   since this workshop was written. The script will print a message and
   exit cleanly rather than crash; see that exercise's `README.md` for
   notes on the page structure at the time of writing.

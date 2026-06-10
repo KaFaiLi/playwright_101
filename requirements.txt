@@ -1,1 +1,2 @@
+# Tested with playwright==1.60.0
 playwright
