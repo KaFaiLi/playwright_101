@@ -75,3 +75,8 @@ instead of crashing. In that case, open the live page, use
 `page.locator(...)` experiments (or `page.content()`) to find the new
 link pattern, and update the selectors in `solution.py` (and the hints
 in `starter.py`) to match.
+
+**Note:** if both paths unexpectedly print `0`, also double-check
+`headless=False` hasn't been changed to `True` — MAS appears to serve a
+different page to headless browsers, which causes both checks to
+silently find nothing.

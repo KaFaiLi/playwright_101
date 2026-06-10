@@ -26,6 +26,10 @@ def main() -> None:
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     with sync_playwright() as p:
+        # headless=False matters here, not just for visibility: MAS appears
+        # to serve a different (maintenance-style) page to headless
+        # browsers, which would make both the direct and fallback checks
+        # below silently return 0.
         browser = p.chromium.launch(channel="msedge", headless=False)
         context = browser.new_context()
 
