@@ -4,39 +4,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-This repo is a **Playwright workshop/training project for business users** (non-developers). It has two parts:
+This repo is a **Playwright workshop for business users** (non-developers): Python + Playwright, driving **Microsoft Edge** (`channel="msedge"`). It is a short (~1.5-2h), hands-on, 3-exercise workshop ending in a capstone that downloads PDFs from https://www.mas.gov.sg/publications.
 
-1. **Intro/demo material** — short scripts and a workshop walkthrough showing what Playwright is and what it can do (launching a browser, navigating, clicking, extracting data, etc.), aimed at an audience with little to no coding background.
-2. **A practical automation**: crawl https://www.mas.gov.sg/publications, follow the publication links, and download every PDF found into a local folder.
-
-The repo also needs **end-user documentation** (a step-by-step guide) explaining how to set up the environment and run the scripts, written for business users rather than engineers.
-
-The repo is currently empty/bootstrap — this file describes the intended stack and conventions to follow as the project is built out.
-
-## Tech stack
-
-- **Python** with the **Playwright** library (`pip install playwright`).
-- **Browser: Microsoft Edge**, via Playwright's `msedge` channel (not the bundled Chromium) — workshop attendees already have Edge installed, and using their familiar browser makes the demo more relatable.
-  - Launch example: `browser = playwright.chromium.launch(channel="msedge", headless=False)`
-  - Use `headless=False` for workshop/demo scripts so the audience can see the browser driving itself. The PDF-download automation can run headless once it's past the demo stage.
-
-## Environment setup
+## Setup & running
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-pip install playwright
+pip install -r requirements.txt
 playwright install msedge
+python check_setup.py
 ```
 
-## MAS publications PDF downloader — key requirements
+Run any exercise's solution directly, e.g.:
+```powershell
+python exercises\01-launch-and-navigate\solution.py
+```
 
-- Entry point: https://www.mas.gov.sg/publications
-- Walk the publication listing (including pagination if present), open each publication page, and locate PDF links.
-- Download PDFs to a local output folder (e.g. `downloads/`), preserving useful naming (publication title/date) so business users can find files easily.
-- Be a polite scraper: add delays between requests/page loads, avoid excessive parallelism, and don't hammer the MAS site.
-- Since this targets a real external government site, verify selectors against the live page structure as it may change — don't assume a fixed DOM layout without checking.
+## Structure
 
-## Documentation
+- `check_setup.py` — pre-workshop smoke test (launch Edge, navigate, print title).
+- `exercises/NN-name/` — one folder per exercise:
+  - `README.md` — goal, concepts, step-by-step instructions, "done when" criteria.
+  - `starter.py` — skeleton with `TODO`s for attendees to fill in.
+  - `solution.py` — complete reference implementation.
+- `downloads/` — output folder for exercise 3's PDFs (gitignored, created at runtime).
 
-Any user-facing guide should be written for non-technical business users: step-by-step, including environment setup, how to run each script, and what output to expect (e.g. where downloaded PDFs land).
+Exercises are self-contained on purpose (no shared helper module) — each script should be readable top-to-bottom on its own.
+
+## Conventions
+
+- Sync API only (`from playwright.sync_api import sync_playwright`), `headless=False` everywhere so the browser is visible during the workshop.
+- No automated test suite — verification is "run `solution.py`, observe the described output/behavior" (see each exercise's README "Done when" section).
+- Exercise 3 (MAS capstone) is intentionally scoped to the single publications listing page (no pagination) and must degrade gracefully (print + skip) if expected links aren't found, since it depends on a live external site.
